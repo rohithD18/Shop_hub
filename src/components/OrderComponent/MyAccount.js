@@ -1,53 +1,64 @@
 import React, { useRef, useState } from "react";
 import Modal from "./Modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useSelector } from "react-redux";
 const Eye = <FontAwesomeIcon className="icon" icon={['fas','eye']} />;
 const EyeSlash = <FontAwesomeIcon className="icon" icon={['fas','eye-slash']} />;
 
 function MyAccount(props) {
-  const modal = useRef(null);
-  const [showPass, setShowPass] = useState(false);
-  const [formData, setFormData] = useState({
-    email: "",
-    currentPassword: "",
-    newPassword: "",
-    confirmPassword: ""
-  });
+  // const modal = useRef(null);
+  // const [showPass, setShowPass] = useState(false);
+  // const [formData, setFormData] = useState({
+  //   email: "",
+  //   currentPassword: "",
+  //   newPassword: "",
+  //   confirmPassword: ""
+  // });
 
-  const { email, currentPassword, newPassword, confirmPassword } = formData;
-  function hangleChange(e) {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-    console.log(formData);
-  }
-  const refConfirmPassword = useRef();
-  function showPassword() {
-    setShowPass(!showPass);
-    refConfirmPassword.current.type = showPass ? "password" : "text";
-  }
+  // const { email, currentPassword, newPassword, confirmPassword } = formData;
+  // function hangleChange(e) {
+  //   setFormData({
+  //     ...formData,
+  //     [e.target.name]: e.target.value
+  //   });
+  //   console.log(formData);
+  // }
+  // const refConfirmPassword = useRef();
+  // function showPassword() {
+  //   setShowPass(!showPass);
+  //   refConfirmPassword.current.type = showPass ? "password" : "text";
+  // }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formData);
-    setFormData({
-      email: "",
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: ""
-    });
-    setShowPass(false);
-  };
-  const canUpdatePassword = [
-    currentPassword,
-    newPassword,
-    confirmPassword
-  ].every(Boolean);
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   console.log(formData);
+  //   setFormData({
+  //     email: "",
+  //     currentPassword: "",
+  //     newPassword: "",
+  //     confirmPassword: ""
+  //   });
+  //   setShowPass(false);
+  // };
+  const userInfo = useSelector((state)=> state.userReducer.users);
+  // console.log(userInfo);
+  // const canUpdatePassword = [
+  //   currentPassword,
+  //   newPassword,
+  //   confirmPassword
+  // ].every(Boolean);
   return (
+    <div>
+      <center>
+        <h2>{userInfo ? userInfo.email : "Login to see your account!"} </h2>
+        </center>
+    
     <div className="myaccount-wrapper common-background">
+       
       <div className="login-wrapper user-profile-wrapper ">
-        <form onSubmit={handleSubmit}>
+       
+        <div>
+          {/* <form onSubmit={handleSubmit}>
           <h4>Update Password</h4>
           <label htmlFor="email">Email:</label>
           <input
@@ -104,9 +115,11 @@ function MyAccount(props) {
           >
             Update Password
           </button>
-        </form>
+        </form> */}
+        </div>
       </div>
-<div className="order-details">
+        <div>
+          {/* <div className="order-details">
       <table>
         <caption>Orders Details</caption>
         <tr>
@@ -127,8 +140,8 @@ function MyAccount(props) {
           </td>
         </tr>
       </table>
-</div>
-      <Modal ref={modal}>
+</div> */}
+      {/* <Modal ref={modal}>
         <div className="cart-wrapper noselect">
           <div className="cart-header">
             <h3>orderID: 65526dsdfs</h3>
@@ -162,7 +175,9 @@ function MyAccount(props) {
             </div>
           </div>
         </div>
-      </Modal>
+      </Modal> */}
+        </div>
+    </div>
     </div>
   );
 }

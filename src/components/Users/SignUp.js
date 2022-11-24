@@ -1,9 +1,15 @@
 import React, { useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useDispatch, useSelector } from "react-redux";
 const Eye = <FontAwesomeIcon className="icon" icon={['fas','eye']} />;
 const EyeSlash = <FontAwesomeIcon className="icon" icon={['fas','eye-slash']} />;
+import { registerUser } from "../../actions/Action";
+import { useNavigate } from "react-router-dom";
 
 function Login(props) {
+  const registeredUser = useSelector((state)=> state.userReducer.users)
+  console.log(registeredUser);
+  const navigate = useNavigate();
   const [showPass, setShowPass] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -12,12 +18,13 @@ function Login(props) {
   });
 
   const { email, password,confirmPassword } = formData;
+  const dispatch = useDispatch();
+
   function hangleChange(e) {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
-    console.log(formData);
   }
   const refConfirmPassword = useRef();
   function showPassword() {
@@ -27,16 +34,19 @@ function Login(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
-    setFormData({
-      email: "",
-      password: "",
-      confirmPassword:"",
-    });
-    setShowPass(false);
+    // console.log(formData);
+      if(formData.password === formData.confirmPassword){
+        setFormData(formData);
+        dispatch(registerUser(formData));
+        navigate("/login")
+       }
+       else{
+        alert('Password and Confirm Password does not match!');
+       };
+       setShowPass(false);
   };
-  const canSignUp =
-  [email, password, confirmPassword].every(Boolean); 
+
+  const canSignUp = [email, password, confirmPassword].every(Boolean); 
   return (
     <div className="login-wrapper ">
       <form onSubmit={handleSubmit} className="common-background">
@@ -58,7 +68,6 @@ function Login(props) {
             onChange={hangleChange}
             id="password"
             name="password"
-            autoComplete
             value={password}
             required
           />
@@ -70,7 +79,6 @@ function Login(props) {
             onChange={hangleChange}
             id="confirmPassword"
             name="confirmPassword"
-            autoComplete
             value={confirmPassword}
             required
           />
@@ -79,10 +87,12 @@ function Login(props) {
           ) : (
             <i onClick={showPassword}>{EyeSlash}</i>
           )}
+          
         </div>
-        <button className="loginButton" type="submit" disabled={!canSignUp}>
+        <button className="loginButton" type="submit" disabled={!canSignUp}   >
           Sign Up
         </button>
+        
       </form>
     </div>
   );

@@ -72,3 +72,16 @@ input[type="search"]::-webkit-search-cancel-button {
 .search-submit-button:active {
   transform: scale(0.8);
 }
+.buttonsPC{
+  width: 300px;
+  display: flex;
+  justify-content: space-evenly;
+  font-size: 14px;
+  font-weight: bold;
+}
+.buttonsP{
+  background-color:  #fa8907;
+  border: none;
+  font-size: 14px;
+  font-weight: bold;
+}

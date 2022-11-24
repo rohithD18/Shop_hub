@@ -1,20 +1,23 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { removeFromCart, addToCart,decrementItem } from "../../Actions/action";
+import { removeFromCart, decrementItem, incrementItem } from "../../actions/Action";
+import { useNavigate } from "react-router-dom";
+import { itemCost, deleteCart } from "../../actions/Action";
 
 
-
-function Cart() {
-  const [quantity, setQuantity] = useState();
+function Cart(props) {
+  const navigate = useNavigate();
   const [cost, setCost] = useState(0)
-  const cartData = useSelector((state)=>state.mainReducer.carts)
-  // console.log(cartData);
+  const cartData = useSelector((state)=>state.cartReducer.carts)
 
   const dispatch = useDispatch();
 
-  const deleteItem = (_id)=>{
-    dispatch(removeFromCart(_id))
+  const deleteItem = (id)=>{
+    dispatch(removeFromCart(id))
+  }
+  const deleteAll =(item)=>{
+    dispatch(deleteCart(item))
   }
 
   const totalCost = ()=>{
@@ -22,21 +25,24 @@ function Cart() {
     cartData.map((item)=>{
       cost = item.price * item.quantity + cost
     });
-    setCost(cost);
+    setCost(cost); 
   }
+
   useEffect(()=>{
     totalCost();
   },[totalCost])
 //   console.log(cost);
 
-  const send =(e)=>{
-  // console.log(e);
-  dispatch(addToCart(e));
+  const increase =(item)=>{
+  dispatch(incrementItem(item));
   }
-
   const decrease = (item)=>{
     dispatch(decrementItem(item))
   }
+ const proceedCheckout =(price)=>{
+  dispatch(itemCost(price))
+  navigate("/payment")
+ }
 
   return (
     <div className="cart-wrapper noselect">
@@ -46,16 +52,16 @@ function Cart() {
       <div>
       {cartData.length === 0 ? (
         <div className="cart-header"><h3>Cart is Empty</h3></div>
-      ) : (<> 
+      ) : (<>
       <div className="cart-list">
           {cartData.map((item, index) =>(
             <ul key={index} >
             <li  className="cart-item">
               <div className="cart-item-img">
-                <img src={item.image} width="90" height="38" alt="cart item" />
+                <img src={item.image} width="170" height="98" alt="cart item" />
               </div>
               <div className="cart-item-name">
-                <span>{item.name} </span>
+                <span>{item.title} </span>
               </div>
               <div className="cart-item-qty">
                 {item.quantity > 1 ? (
@@ -63,12 +69,12 @@ function Cart() {
                     <FontAwesomeIcon icon={["fas", "minus"]} />
                   </span>
                 ) : (
-                  <span onClick={()=>deleteItem(item._id)} className="cart-delete-item">
+                  <span onClick={()=>deleteItem(item.id)} className="cart-delete-item">
                     <FontAwesomeIcon icon={["far", "trash-alt"]} />
                   </span>
                 )}
                 <p >{item.quantity}</p>
-                <span onClick={() => send(item)}>
+                <span onClick={() => increase(item)}>
                   <FontAwesomeIcon icon={["fas", "plus"]} />
                 </span>
               </div>
@@ -76,23 +82,23 @@ function Cart() {
             </li>
             </ul>
           ))}
-        
       </div>
       <div className="cart-checkout">
         <div className="cart-total">
-          <h4>Total :${cost} </h4>
+          <h4>Total: ${cost} </h4>
           <span></span>
         </div>
         <div className="cart-shipping">
-          <h4>Shipping :</h4>
+          <h4>Shipping: </h4>
           <span>Free Shipping</span>
         </div>
         <div className="cart-checkout-button">
-          <button>Proceed to Checkout</button>
+        <button onClick={()=>proceedCheckout(cost)}>Proceed to Checkout</button>&nbsp;
+        <button className="clearcart" onClick={()=>deleteAll(cartData)}>Clear Cart</button>
         </div>
       </div>
       </>    
- ) }
+ )}
  </div>
     </div>
   );

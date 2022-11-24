@@ -1,11 +1,13 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import {Link,NavLink} from "react-router-dom";
-import { useSelector } from "react-redux";
+import {Link,NavLink } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUser } from "../../actions/Action";
 
 function Header(){
-
-  const getData = useSelector((state)=>state.mainReducer.carts)
+  const dispatch = useDispatch();
+  const getData = useSelector((state)=>state.cartReducer.carts)
+  const registeredUser = useSelector((state)=> state.userReducer.users)
 
   function overlay(isShow){
     var elm = document.querySelector('#overlay');
@@ -22,8 +24,6 @@ function Header(){
     overlay(true);
     document.querySelector(".nav-links").style.width = "20rem";
   }
-  
-  
   function closeSidebar() {
     overlay(false);
     document.querySelector(".nav-links").style.width = "0";
@@ -37,6 +37,12 @@ if(window.innerWidth<=width[0]){
 else{
   return
 }
+}
+
+const handleLogout=()=>{
+  if (registeredUser !== '') {
+    dispatch(logoutUser());
+  }
 }
 
   return(
@@ -70,13 +76,20 @@ else{
           <NavLink onClick={resizefn} to="/shop" className="nav-link">Shop</NavLink>
           <NavLink onClick={resizefn} to="/blog" className="nav-link">Blog</NavLink>
           <NavLink onClick={resizefn} to="/contact" className="nav-link">Contact</NavLink>
-          <NavLink onClick={resizefn} to="/login" className="nav-link">Login</NavLink>
-          <NavLink onClick={resizefn} to="/signup" className="nav-link">SignUp</NavLink>
-          <NavLink onClick={resizefn} to="/myaccount" className="nav-link">My Account</NavLink>
+          {
+            registeredUser != null ? 
+            <>
+            <NavLink onClick={resizefn} to="/myaccount" className="nav-link">My Account</NavLink>
+            <NavLink onClick={()=>handleLogout()} to="/signup" className="nav-link">Logout</NavLink>
+            </> : 
+            <>
+            <NavLink onClick={resizefn} to="/login" className="nav-link">Login</NavLink>
+            <NavLink onClick={resizefn} to="/signup" className="nav-link">SignUp</NavLink>
+            </>
+          }
         </div>
       </nav>
       <div className="cart">
-        {/* <span className="total"></span> */}
         <div className="cart-icon">
           <Link to="/cart" className="cart-button">
             <span  aria-label="shopping cart" role="img"> <FontAwesomeIcon icon={['fas','shopping-bag']}/></span></Link>
@@ -86,6 +99,5 @@ else{
     </header>
   );
 }
-
 
 export default Header;

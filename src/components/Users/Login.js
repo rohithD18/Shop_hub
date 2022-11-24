@@ -1,9 +1,13 @@
 import React, { useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {  useSelector } from "react-redux";
 const Eye = <FontAwesomeIcon className="icon" icon={['fas','eye']} />;
 const EyeSlash = <FontAwesomeIcon className="icon" icon={['fas','eye-slash']} />;
+import {  useNavigate } from "react-router-dom";
+
 
 function Login(props) {
+  const navigate = useNavigate();
   const [showPass, setShowPass] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -11,12 +15,15 @@ function Login(props) {
   });
 
   const { email, password } = formData;
+
+  const registeredUser = useSelector((state)=> state.userReducer.users)
+  // console.log(registeredUser);
+
   function hangleChange(e) {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
-    console.log(formData);
   }
   const refPassword = useRef();
   function showPassword() {
@@ -26,14 +33,19 @@ function Login(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
-    setFormData({
-      email: "",
-      password: ""
-    });
+    // console.log(formData);
+    if(email === registeredUser?.email && password === registeredUser?.password){
+      setFormData({
+        email: "",
+        password: ""
+      });
+      navigate('/')
+    }else{
+      alert('Wrong Crendentials!')
+    }
     setShowPass(false);
+    
   };
-
   const canSignIn =
   [email, password].every(Boolean); 
 
@@ -60,7 +72,6 @@ function Login(props) {
             onChange={hangleChange}
             id="password"
             name="password"
-            autoComplete
             value={password}
             required
           />
