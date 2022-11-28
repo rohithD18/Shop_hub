@@ -8,7 +8,7 @@ import "./button.css";
 import "./orders.css";
 import "./modal.css";
 import React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Switch } from "react-router-dom";
 import Header from "./components/HeaderComponent/Header";
 import Products from "./components/ProductsComponent/Products";
 import Footer from "./components/FooterComponent/Footer";
@@ -19,7 +19,8 @@ import SearchedProduct from "./components/ProductsComponent/SearchedProduct";
 import Login from "./components/Users/Login";
 import SignUp from "./components/Users/SignUp";
 import MyAccount from "./components/OrderComponent/MyAccount";
-import { connect } from "react-redux";
+import PaymentGateway from "./components/ProductsComponent/PaymentGateway";
+import Categories from "./components/ProductsComponent/Categories";
 
 function App({current}) {
   return (
@@ -27,17 +28,19 @@ function App({current}) {
       <div className="grid-container noselect">
         <Header />
         <main className="main-content noselect">
-          <Switch>
-            <Route exact path="/" component={Products} />
-            <Route exact path="/shop" component={ProductDetails} />
-            <Route exact path="/shop/:id" component={ProductDetails} />
-            <Route exact path="/cart" component={Cart} />
-            <Route exact path="/blog" component={SearchedProduct} />
-            <Route exact path="/search" component={SearchedProduct} />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/signup" component={SignUp} />
-            <Route exact path="/myaccount" component={MyAccount} />
-          </Switch>
+          <Routes>
+            <Route exact path="/" element={<Products />} />
+            <Route exact path="/shop" element={<ProductDetails />} />
+            <Route exact path="/shop/:id" element={<ProductDetails />} />
+            <Route exact path="/cart" element={<Cart />} />
+            <Route exact path="/blog" element={<SearchedProduct />} />
+            <Route exact path="/search" element={<SearchedProduct />} />
+            <Route exact path="/login" element={<Login />} />
+            <Route exact path="/signup" element={<SignUp />} />
+            <Route exact path="/myaccount" element={<MyAccount />} />
+            <Route exact path="/payment" element={<PaymentGateway />} />
+            <Route exact path="/categories" element={<Categories />} />
+          </Routes>
         </main>
         <Buttons />
         <Footer />
@@ -45,10 +48,5 @@ function App({current}) {
     </Router>
   );
 }
-const mapStateToProps = (state) =>{
-  return {
-    current : state,
-  };
-};
 
-export default connect(mapStateToProps)(App);
+export default App;

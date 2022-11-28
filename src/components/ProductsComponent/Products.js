@@ -1,27 +1,36 @@
-import React from "react";
-import data from "../../data";
+import React, { useEffect, useState } from "react";
 import ProductsHeader from "./ProductsHeader";
 import ProductCard from "./ProductCard";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { getProducts } from "../../actions/Action";
+
 
 function Product(props) {
+  const [products, setProducts] = useState([]);
+
+  const dispatch = useDispatch();
+
+  const fetchProducts = async()=>{
+  await axios.get('https://fakestoreapi.com/products')
+   .then((res)=>{
+    if (res.status===200) {
+      dispatch(getProducts(res.data));
+      setProducts(res.data);
+    }
+   })
+    .catch((err)=>console.log("Error", err)) 
+  }
+  useEffect(()=>{
+    fetchProducts();
+  })
+ 
   return (
     <div className="products">
       <ProductsHeader />
       <div className="products-container">
         <div className="product-cards" dir="ltr">
-          {data.products.map((product,index) => (
-            <div key={index}>
-            <ProductCard product={product} />
-            </div>
-          ))}
-        </div>
-      </div>
-      <div className="related-products">
-        <div className="related-products-header">
-          <h1>Related Products</h1>
-        </div>
-        <div className="related-products-card">
-          {data.products.map((product,index) => (
+          {products.map((product,index) => (
             <div key={index}>
             <ProductCard product={product} />
             </div>

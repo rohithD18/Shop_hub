@@ -41,14 +41,16 @@
 display: flex;
 justify-content: center;
 align-items: center;
-height: 7rem;
-width:12rem;
+height: 10rem;
+width:18rem;
 background-color: #f1d6c4;
 background-color: #f1d6c4;
   border-radius: 1rem;
   box-shadow: 0 0 1rem 0.5rem #fff inset;
 }
-
+img{
+  border-radius: 20px;
+}
 
 .cart-item-name,
 .cart-item-price {
@@ -145,3 +147,11 @@ background-color: #f1d6c4;
     grid-area: 2/4/3/5;
   }
 }
+.clearcart{
+  color: #000000 !important;
+  background-color: red !important;
+  width: 110px !important;
+  font-weight: bold;
+  
+}
+

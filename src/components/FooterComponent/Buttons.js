@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useRef, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Modal from "../OrderComponent/Modal";
 function Buttons(props) {
   const switchTheme = (e) => {
@@ -17,12 +17,12 @@ function Buttons(props) {
     }
   };
 
-  let history = useHistory();
+  let navigate = useNavigate();
   const [searchKeyword, setSearchKeyword] = useState("");
   function handleSearch(e) {
     e.preventDefault();
     // console.log(searchKeyword);
-    history.push("/search?keyword=" + searchKeyword);
+    navigate("/search?keyword=" + searchKeyword);
     setSearchKeyword("");
     modalRef.current.close();
   }
