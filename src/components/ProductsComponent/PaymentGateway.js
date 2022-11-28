@@ -29,4 +29,4 @@ const PaymentGateway = () => {
   )
 }
 
-export default PaymentGateway
+export default PaymentGateway;
